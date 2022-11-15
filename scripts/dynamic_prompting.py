@@ -1,4 +1,5 @@
 from __future__ import annotations
+import os
 import logging
 from string import Template
 from pathlib import Path
@@ -108,8 +109,9 @@ class Script(scripts.Script):
     def _create_generator(self, original_prompt, original_seed, is_feeling_lucky, enable_jinja_templates, is_combinatorial, is_magic_prompt, combinatorial_batches, magic_prompt_length, magic_temp_value):
         if is_feeling_lucky:
             generator = FeelingLuckyGenerator(original_prompt)
-        elif enable_jinja_templates:
-            generator = new_generation(original_prompt)
+		# integrate Jinja with Dynamic Prompts below
+        #elif enable_jinja_templates:
+        #    generator = new_generation(original_prompt)
         else:
             generator = old_generation(
                 original_prompt,
@@ -292,10 +294,17 @@ class Script(scripts.Script):
                 magic_prompt_length,
                 magic_temp_value,
             )
-
+            # run Dynamic Prompt normally
             all_prompts = generator.generate(num_images)
             p.negative_prompt = self._negative_prompt_generator.generate(1)[0]
             
+            # Do jinja AFTER dynamic, so loops and stuff work
+            if (enable_jinja_templates):
+                jinja_generator = new_generation(original_prompt)
+                jinja_generator_neg = new_generation(p.negative_prompt)
+                all_prompts = jinja_generator.generate_from_prompts(all_prompts)
+                p.negative_prompt = jinja_generator_neg.generate_from_prompts([p.negative_prompt])[0]
+
         except GeneratorException as e:
             logger.exception(e)
             all_prompts = [str(e)]

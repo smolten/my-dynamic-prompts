@@ -107,17 +107,26 @@ class RandomPromptGenerator(PromptGenerator):
             if counter > constants.MAX_RECURSIONS:
                 raise Exception("Too many recursions, something went wrong with generating the prompt")
 
+            #print(f"Picking variant from:\n{old_prompt}")
             prompt = self.pick_variant(old_prompt)
+            #print(f"Picking variants from:\n{prompt}")
             prompt = self.pick_wildcards(prompt)
 
             if prompt == old_prompt:
                 logger.info(f"Prompt: {prompt}")
+                #print(f"Prompt:\n{prompt}\n")
                 return prompt
             old_prompt = prompt
 
     def generate(self, num_prompts) -> list[str]:
         all_prompts = [
             self.generate_prompt(self._template) for _ in range(num_prompts)
+        ]
+
+        return all_prompts
+    def generate_from_prompts(self, given_prompts) -> list[str]:
+        all_prompts = [
+            self.generate_prompt(prompt) for prompt in given_prompts
         ]
 
         return all_prompts

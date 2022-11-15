@@ -117,3 +117,23 @@ class JinjaGenerator(PromptGenerator):
         except TemplateSyntaxError as e:
             logger.exception(e)
             raise GeneratorException(e.message)
+
+    def generate_from_prompts(self, given_prompts) -> list[str]:
+        try:
+            env = Environment(
+                extensions=[RandomExtension, PromptExtension, WildcardExtension, PermutationExtension]
+            )
+            env.wildcard_manager = self._wildcard_manager
+
+            prompts = []
+            for prompt in given_prompts:
+                template = env.from_string(prompt)
+                s = template.render()
+                prompts.append(s)
+
+            if env.prompt_blocks:
+                prompts = env.prompt_blocks
+            return prompts
+        except TemplateSyntaxError as e:
+            logger.exception(e)
+            raise GeneratorException(e.message)
