@@ -11,8 +11,10 @@ re_wildcard = re.compile(r"__(.*?)__")
 # so switch Dynamic Prompt to use <> instead of {} - this Dynamic Prompt regex <||> now ignores Jinja scripts {{}} {##} {%%} 
 re_combinations = re.compile(r"<([^<>]*)>")
 
-from .randomprompt import RandomPromptGenerator
-from .combinatorial import CombinatorialPromptGenerator
-from .magicprompt import MagicPromptGenerator
 from .batched_combinatorial import BatchedCombinatorialPromptGenerator
+from .combinatorial import CombinatorialPromptGenerator
+from .dummygenerator import DummyGenerator
 from .feelinglucky import FeelingLuckyGenerator
+from .magicprompt import MagicPromptGenerator
+from .randomprompt import RandomPromptGenerator
+from .attentiongenerator import AttentionGenerator

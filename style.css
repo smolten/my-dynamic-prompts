@@ -59,7 +59,7 @@
 }
 
 #is-feelinglucky:after {
-    content: "Generate random prompts from lexica.art (the main prompt is ignored)."
+    content: "Generate random prompts from lexica.art (your prompt is used as a search query)."
 }
 
 #is-fixed-seed:after {
@@ -72,6 +72,18 @@
 
 #unlink-seed-from-prompt:after {
     content: "If this is set, then random prompts are generated, even if the seed is the same."
+}
+
+#disable-negative-prompt:after {
+    content: "Useful for I'm feeling lucky and Magic Prompt. If this is set, then negative prompts are not generated."
+}
+
+#no-image-generation:after {
+    content: "Disable image generation. Useful if you only want to generate text prompts."
+}
+
+#is-attention-grabber:after {
+    content: "Add emphasis to a randomly selected keyword in the prompt."
 }
 
 .dynamic-prompting h2 {
